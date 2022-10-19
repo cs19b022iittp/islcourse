@@ -143,7 +143,7 @@ def get_model_advanced(train_data_loader=train_dataloader, n_epochs=10,lr=1e-4,c
 model1 = get_model_advanced()
 
 # sample invocation torch.hub.load(myrepo,'test_model',model1=model,test_data_loader=test_data_loader,force_reload=True)
-def test_model(model1=None, test_data_loader=None):
+def test_model(model1=model1, test_data_loader=test_dataloader,force_reload=True):
 
   accuracy_val, precision_val, recall_val, f1score_val = 0, 0, 0, 0
   # write your code here as per instructions
@@ -151,8 +151,54 @@ def test_model(model1=None, test_data_loader=None):
   # ... your code ...
   # ... and so on ...
   # calculate accuracy, precision, recall and f1score
+
+  size = len(test_data_loader.dataset)
+  num_batches = len(test_data_loader)
+  model1.eval()
+  test_loss, correct = 0, 0
+  with torch.no_grad():
+      for X, y in test_data_loader:
+          X, y = X.to(device), y.to(device)
+          pred = model1(X)
+          test_loss += loss_fn(pred, y).item()
+          correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+  test_loss /= num_batches
+  correct /= size
+
+
+  accuracy_val = correct
+
+  classes = [
+    "Hawaei",
+    "Motorola",
+    "Vivo",
+    "Oppo",
+    "Poco",
+    "Redmi",
+    "Realme",
+    "Apple",
+    "Samsung",
+    "Nokia",
+  ]
+
+  model = model1.eval()
+  x = []
+  y = [] 
+  y1 = []
+  for i in test_data :
+    x.append(i[0])
+    y.append(i[1])
+    with torch.no_grad():
+      pred = model(i[0])
+      predicted = pred[0].argmax(0)
+      # print()
+      y1.append(classes.index(classes[predicted]))
   
-  print ('Returning metrics... (rollnumber: xx)')
+  print ('Returning metrics... (rollnumber: cs19b022)')
+  print(y)
+  print(y1)
+  precision_recall_fscore_support(y, y1, average='macro')
   
   return accuracy_val, precision_val, recall_val, f1score_val
 
+output=test_model()
