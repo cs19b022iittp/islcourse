@@ -79,6 +79,30 @@ train_dataloader, test_dataloader = create_dataloaders(training_data, test_data,
 
 def get_model(train_data_loader=None, n_epochs=10):
   model =cs19b022NN().to(device)
+  optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+  size = len(train_dataloader.dataset)
+  model.train()
+  for epoch in range(1,n_epochs+1):
+    print("Epoch ", epoch);
+    for batch, (X, y) in enumerate(train_dataloader):
+      X, y = X.to(device), y.to(device)
+
+      # Compute prediction error
+      pred = model(X)
+      loss = loss_fn(pred, y)
+
+      # Backpropagation
+      optimizer.zero_grad()
+      loss.backward()
+      optimizer.step()
+
+      if batch % 100 == 0:
+          loss, current = loss.item(), batch * len(X)
+          print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+
+  
+
 
   # write your code here as per instructions
   # ... your code ...
