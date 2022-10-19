@@ -12,10 +12,14 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+from sklearn.metrics import confusion_matrix
 import numpy as np
+from sklearn.metrics import precision_recall_fscore_support
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
+
+loss_fn = nn.CrossEntropyLoss()
 def kali():
   print ('kali')
   
@@ -151,3 +155,4 @@ def test_model(model1=None, test_data_loader=None):
   print ('Returning metrics... (rollnumber: xx)')
   
   return accuracy_val, precision_val, recall_val, f1score_val
+
