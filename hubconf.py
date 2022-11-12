@@ -40,7 +40,7 @@ def loss_fn(y_pred, y_ground):
   return v
 
 def get_model(train_data_loader, n_epochs):
-  for X,y in mod_train_loader:
+  for X,y in train_data_loader:
     N, C, H, W =  X.shape
     break;
   config =[]
@@ -72,7 +72,7 @@ def get_model(train_data_loader, n_epochs):
 
 
 def get_model_advanced(train_data_loader, n_epochs, lr,config):
-  for X,y in mod_train_loader:
+  for X,y in train_data_loader:
     N, C, H, W =  X.shape
     break;
   model = cs19b022NN(config, C, H, W).to(device)
