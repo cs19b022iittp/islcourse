@@ -104,10 +104,12 @@ def get_model_advanced(train_data_loader, n_epochs, lr,config):
 
 
 
-def test(test_data_loader, model):
+def test(model1, test_data_loader):
+  
+  accuracy_val,precision_val, recall_val, f1_val = 0,0,0,0
   size = len(test_data_loader.dataset)
   num_batches = len(test_data_loader)
-  model.eval()
+  model1.eval()
 
   actual = []   
   predicted = [] 
@@ -115,7 +117,7 @@ def test(test_data_loader, model):
   with torch.no_grad():
       for X, y in test_data_loader:
            X, y = X.to(device), y.to(device)
-           y1 = model(X)
+           y1 = model1(X)
            actual.append(y)
            predicted.append(y1.argmax(1))
            y_h = F.one_hot(y, num_classes= 10)
