@@ -197,7 +197,7 @@ def get_model(training_data_loader, n_epochs):
           print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
   return model
 
-model = get_model(mod_train_loader,10)
+
 
 def test(test_data_loader, model):
   size = len(test_data_loader.dataset)
@@ -235,5 +235,3 @@ def test(test_data_loader, model):
   print(f"Precision: {(precision_val):>0.4f}")
   print(f"Recall   : {(recall_val):>0.4f}")
   print(f"F1 scores: {(f1_val):>0.4f}")
-
-test(mod_test_loader, model)
