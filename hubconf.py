@@ -46,12 +46,12 @@ def get_model(train_data_loader, n_epochs):
   config =[]
   model = cs19b022NN(config, C, H, W).to(device)
   print(model)
-  size = len(training_data_loader.dataset)
+  size = len(train_data_loader.dataset)
   optimizer = torch.optim.SGD(model.parameters(), lr=10e-4)
   model.train()
   for epoch in range(1,n_epochs+1):
     print("Epoch ", epoch);
-    for batch, (X, y) in enumerate(training_data_loader):
+    for batch, (X, y) in enumerate(train_data_loader):
       X, y = X.to(device), y.to(device)
 
       # Compute prediction error
@@ -77,12 +77,12 @@ def get_model_advanced(train_data_loader, n_epochs, lr,config):
     break;
   model = cs19b022NN(config, C, H, W).to(device)
   print(model)
-  size = len(training_data_loader.dataset)
+  size = len(train_data_loader.dataset)
   optimizer = torch.optim.SGD(model.parameters(), lr=10e-4)
   model.train()
   for epoch in range(1,n_epochs+1):
     print("Epoch ", epoch);
-    for batch, (X, y) in enumerate(training_data_loader):
+    for batch, (X, y) in enumerate(train_data_loader):
       X, y = X.to(device), y.to(device)
 
       # Compute prediction error
