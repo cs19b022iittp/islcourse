@@ -72,17 +72,17 @@ def compare_clusterings(ypred_1=None,ypred_2=None):
   h,c,v = get_hcv_scores(ypred_1,ypred_2)
   return h,c,v
 
-X_b , y_b = get_data_blobs()
-X_c, y_c = get_data_circles()
-km = build_kmeans(X = X_b, k = 10)
-y_b_pred = assign_kmeans(km, X_b)
-# print(y_b_pred)
+# X_b , y_b = get_data_blobs()
+# X_c, y_c = get_data_circles()
+# km = build_kmeans(X = X_b, k = 10)
+# y_b_pred = assign_kmeans(km, X_b)
+# # print(y_b_pred)
 
-km = build_kmeans(X = X_c, k = 10)
-y_c_pred = assign_kmeans(km, X_c)
-# print(y_c_pred)
+# km = build_kmeans(X = X_c, k = 10)
+# y_c_pred = assign_kmeans(km, X_c)
+# # print(y_c_pred)
 
-print(compare_clusterings(y_b_pred, y_c_pred))
+# print(compare_clusterings(y_b_pred, y_c_pred))
 
 
 
