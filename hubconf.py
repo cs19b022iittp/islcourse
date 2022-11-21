@@ -86,11 +86,15 @@ def compare_clusterings(ypred_1=None,ypred_2=None):
 
 
 
-"""###### PART 2 ######"""
+"""###### PART 2 ######
+
+###### PART 2A ######
+"""
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.model_selection import GridSearchCV
 
 def build_lr_model(X=None, y=None):
   lr_model = LogisticRegression(solver="liblinear",fit_intercept=False)
@@ -117,24 +121,35 @@ def get_metrics(model1=None,X=None,y=None):
   prec = precision_score(y, y_pred, average='micro')
   rec =  recall_score(y, y_pred , average='micro')
   f1 =  f1_score(y, y_pred, average='micro' )
-  auc = roc_auc_score(y, model1.predict_proba(X), multi_class='ovr' )
+  auc = roc_auc_score(y,  model1.predict_proba(X), multi_class='ovr' )
   # write your code here...
   return acc, prec, rec, f1, auc
 
-# from sklearn.model_selection import train_test_split
-# X, y = get_data_mnist()
-# Xtrain,Xtest,ytrain,ytest = train_test_split(X,y,test_size=0.3)
+from sklearn.model_selection import train_test_split
+X, y = get_data_mnist()
+Xtrain,Xtest,ytrain,ytest = train_test_split(X,y,test_size=0.3)
 
-# lr_model = build_lr_model(Xtrain, ytrain)
-# rf_model = build_rf_model(Xtrain, ytrain)
+lr_model = build_lr_model(Xtrain, ytrain)
+rf_model = build_rf_model(Xtrain, ytrain)
 
-# print(get_metrics(lr_model, Xtest, ytest))
-# print(get_metrics(rf_model, Xtest, ytest))
+print(get_metrics(lr_model, Xtest, ytest))
+print(get_metrics(rf_model, Xtest, ytest))
+
+"""###### PART 2B ######"""
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.model_selection import GridSearchCV
 
 def get_paramgrid_lr():
   # you need to return parameter grid dictionary for use in grid search cv
   # penalty: l1 or l2
-  lr_param_grid = None
+  lr_param_grid = {
+      "max_iter": [100, 200, 500],
+      "penalty": ["l1","l2"],
+      "solver" : ["liblinear"]
+  }
   # refer to sklearn documentation on grid search and logistic regression
   # write your code here...
   return lr_param_grid
@@ -144,12 +159,16 @@ def get_paramgrid_rf():
   # n_estimators: 1, 10, 100
   # criterion: gini, entropy
   # maximum depth: 1, 10, None  
-  rf_param_grid = None
+  rf_param_grid = { 
+             "n_estimators"      : [10,20,30],
+               "criterion": ['gini', 'entropy'],
+                "max_depth": [1,10,None],
+                }
   # refer to sklearn documentation on grid search and random forest classifier
   # write your code here...
   return rf_param_grid
 
-def perform_gridsearch_cv_multimetric(model=None, param_grid=None, cv=5, X=None, y=None, metrics=['accuracy','roc_auc']):
+def perform_gridsearch_cv_multimetric(model1=None, param_grid=None, cv=5, X=None, y=None, metrics=['accuracy','roc_auc']):
   
   # you need to invoke sklearn grid search cv function
   # refer to sklearn documentation
@@ -157,7 +176,7 @@ def perform_gridsearch_cv_multimetric(model=None, param_grid=None, cv=5, X=None,
   
   # metrics = [] the evaluation program can change what metrics to choose
   
-  grid_search_cv = None
+
   # create a grid search cv object
   # fit the object on X and y input above
   # write your code here...
@@ -166,14 +185,15 @@ def perform_gridsearch_cv_multimetric(model=None, param_grid=None, cv=5, X=None,
   
   # refer to cv_results_ dictonary
   # return top 1 score for each of the metrics given, in the order given in metrics=... list
-  
+ 
   top1_scores = []
+
+  for scoring in metrics:
+    grid_search_cv = GridSearchCV(model1,param_grid, cv=cv, scoring=scoring)
+    grid_search_cv.fit(X,y)
+    top1_scores.append(grid_search_cv.best_score_)
   
   return top1_scores
-
-
-
-
 
 """###### PART 3 ######"""
 
