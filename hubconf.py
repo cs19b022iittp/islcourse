@@ -11,6 +11,8 @@ import torch
 from torch import nn
 import torch.optim as optim
 from sklearn.datasets import make_blobs, make_circles, load_digits
+from sklearn.metrics.cluster import homogeneity_score, completeness_score, v_measure_score
+from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn.linear_model import LogisticRegression
@@ -45,25 +47,42 @@ def build_kmeans(X=None,k=10):
   pass
   # k is a variable, calling function can give a different number
   # Refer to sklearn KMeans method
-  km = None # this is the KMeans object
+  km = KMeans(n_clusters=k, random_state=0).fit(X) # this is the KMeans object
   # write your code ...
   return km
 
 def assign_kmeans(km=None,X=None):
-  pass
+  
   # For each of the points in X, assign one of the means
   # refer to predict() function of the KMeans in sklearn
   # write your code ...
-  ypred = None
+  ypred = km.predict(X)
   return ypred
+
+def get_hcv_scores(y_true,y_pred):
+  homogenity = "%.6f" % homogeneity_score(y_true, y_pred)
+  completeness = "%.6f" % completeness_score(y_true, y_pred)
+  v_measure = "%.6f" % v_measure_score(y_true, y_pred)
+  return homogenity,completeness,v_measure
 
 def compare_clusterings(ypred_1=None,ypred_2=None):
   pass
   # refer to sklearn documentation for homogeneity, completeness and vscore
-  h,c,v = 0,0,0 # you need to write your code to find proper values
+  # you need to write your code to find proper values
+  h,c,v = get_hcv_scores(ypred_1,ypred_2)
   return h,c,v
 
+X_b , y_b = get_data_blobs()
+X_c, y_c = get_data_circles()
+km = build_kmeans(X = X_b, k = 10)
+y_b_pred = assign_kmeans(km, X_b)
+# print(y_b_pred)
 
+km = build_kmeans(X = X_c, k = 10)
+y_c_pred = assign_kmeans(km, X_c)
+# print(y_c_pred)
+
+print(compare_clusterings(y_b_pred, y_c_pred))
 
 
 
